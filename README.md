@@ -1,6 +1,17 @@
+# install
+
+```
+npm intall -g create-react-app
+npx create-react-app dev-helper-ui --template typescript
+npm install react-dom-router
+npm install @mui/material @emotion/react @emotion/styled 
+npm install @mui/icons-material @mui/lab
+```
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
 
 ## Available Scripts
 
