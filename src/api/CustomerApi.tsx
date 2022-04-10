@@ -8,4 +8,3 @@ export const CustomerApi = (customerCode: string): Customer => {
   return dataList[0];
 };
 
-

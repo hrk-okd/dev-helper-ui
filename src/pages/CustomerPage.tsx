@@ -1,40 +1,74 @@
 import React from 'react';
-import ResponsiveAppBar from '../components/ResponsiveAppBar';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import Business from '@mui/icons-material/Business';
-
 import { useParams } from "react-router-dom";
+import {
+  Box,
+  CssBaseline,
+  Container,
+  Tab,
+  Tabs,
+  Typography,
+} from '@mui/material';
+import {
+  TabContext,
+  TabList,
+  TabPanel,
+} from '@mui/lab';
+
+import { ResponsiveAppBar } from '../components/ResponsiveAppBar';
 import { Customer } from '../model/Customer';
 import { CustomerApi } from '../api/CustomerApi';
-
 import '../App.css';
 
+
+const BasicTab = () => {
+  return (
+    <TabPanel value="basic">
+      <h4>基本情報</h4>
+    </TabPanel>
+  );
+};
+
+const SettingsTab = () => {
+  return (
+    <TabPanel value="settings">
+      <h4>設定</h4>
+    </TabPanel>
+  );
+};
+
+
+
 export const CustomerPage = () => {
+
   let { customerCode } = useParams();
+  const customer = customerCode ? CustomerApi(customerCode) : {customerCode: '', customerName: ''};
 
-  let customer;
-  if (customerCode == null) {
-    customer = {};
-  } else {
-    customer = CustomerApi(customerCode);
-  }
-
-  console.log('cp');
+  const [value, setValue] = React.useState('basic');
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
 
   return (
-    <div className='App'>
-      <ResponsiveAppBar />
+    <>
+      <ResponsiveAppBar 
+        customerCode={customer.customerCode} customerName={customer.customerName} />
+      <CssBaseline />
+      <Container maxWidth="lg">
 
-      <h2>{customer.customerName}</h2>
-
-    </div>
+        <Box sx={{ width: '100%', typography: 'body1' }}>
+          <TabContext value={value}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <TabList onChange={handleChange} aria-label="lab API tabs example">
+                <Tab label="基本情報" value="basic" />
+                <Tab label="設定" value="settings" />
+              </TabList>
+            </Box>
+            <BasicTab />
+            <SettingsTab />
+          </TabContext>
+        </Box>
+      </Container>
+    </>
   );
 };
 

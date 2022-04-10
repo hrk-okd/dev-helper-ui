@@ -10,13 +10,14 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 
-const pages = ['Customers', 'Mail', 'Log'];
-const pageItems = [
-  { name: 'Customers', link: ''},
-  { name: 'Mail', link: ''},
-];
+const smPageItems = ['Customers'];
 
-const ResponsiveAppBar = () => {
+interface ResponsiveAppBarProps {
+  customerCode?: string;
+  customerName?: string;
+}
+
+export const ResponsiveAppBar = (props: ResponsiveAppBarProps) => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -27,19 +28,65 @@ const ResponsiveAppBar = () => {
     setAnchorElNav(null);
   };
 
+  const fixPageItems = [
+    { name: '顧客選択', link: '/' },
+  ];
+
+  const dynamicPageItems = props.customerCode ? 
+  [
+    { name: '顧客情報', link: '/customer/' + props.customerCode },
+    { name: '顧客設定', link: '/customer/' + props.customerCode + '/settings' },
+    { name: '組織情報', link: '/customer/' + props.customerCode + '/organizations'  },
+  ] : [];
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar disableGutters sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            {fixPageItems.map((page) => (
+              <Button
+                key={page.name}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+                href={page.link}
+              >
+                {page.name}
+              </Button>
+            ))}
+          </Box>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            {dynamicPageItems.map((page) => (
+              <Button
+                key={page.name}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+                href={page.link}
+              >
+                {page.name}
+              </Button>
+            ))}
+          </Box>
+
           <Typography
-            variant="h6"
+            variant="subtitle1"
             noWrap
             component="div"
             sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
           >
-            Dev Helper
+            {props.customerName}
           </Typography>
+          <Typography
+            variant="subtitle2"
+            noWrap
+            component="div"
+            sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
+          >
+            {props.customerCode}
+          </Typography>
+        </Toolbar>
 
+        <Toolbar disableGutters sx={{ display: { xs: 'flex', md: 'none' } }}>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -69,7 +116,7 @@ const ResponsiveAppBar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
+              {smPageItems.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
@@ -84,22 +131,9 @@ const ResponsiveAppBar = () => {
           >
             Dev Helper
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pageItems.map((page) => (
-              <Button
-                key={page.name}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-                href={page.link}
-              >
-                {page.name}
-              </Button>
-            ))}
-          </Box>
         </Toolbar>
       </Container>
     </AppBar>
   );
 };
 
-export default ResponsiveAppBar;
