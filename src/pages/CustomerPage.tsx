@@ -4,6 +4,11 @@ import {
   Box,
   CssBaseline,
   Container,
+  Divider,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  Input,
   Tab,
   Tabs,
   Typography,
@@ -23,7 +28,12 @@ import '../App.css';
 const BasicTab = () => {
   return (
     <TabPanel value="basic">
-      <h4>基本情報</h4>
+      <h5>基本情報</h5>
+      <FormControl>
+        <InputLabel htmlFor="my-input">Email address</InputLabel>
+        <Input id="my-input" aria-describedby="my-helper-text" />
+        <FormHelperText id="my-helper-text">We'll never share your email.</FormHelperText>
+      </FormControl>
     </TabPanel>
   );
 };
@@ -37,11 +47,10 @@ const SettingsTab = () => {
 };
 
 
-
 export const CustomerPage = () => {
 
   let { customerCode } = useParams();
-  const customer = customerCode ? CustomerApi(customerCode) : {customerCode: '', customerName: ''};
+  const customer = customerCode ? CustomerApi(customerCode) : { customerCode: '', customerName: '' };
 
   const [value, setValue] = React.useState('basic');
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -50,7 +59,7 @@ export const CustomerPage = () => {
 
   return (
     <>
-      <ResponsiveAppBar 
+      <ResponsiveAppBar
         customerCode={customer.customerCode} customerName={customer.customerName} />
       <CssBaseline />
       <Container maxWidth="lg">
